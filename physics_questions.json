@@ -1,0 +1,152 @@
+[
+  {
+    "subject": "physics",
+    "question": "정지해 있던 질량 2kg의 물체에 일정한 힘 10N을 수평 방향으로 작용시켰다. 2초 후의 속력은 얼마인가? (단, 마찰은 무시한다.)",
+    "options": ["5 m/s", "10 m/s", "20 m/s"],
+    "answer": 1
+  },
+  {
+    "subject": "physics",
+    "question": "질량 1kg의 물체가 10m 높이에서 정지해 있다. 이 물체의 위치에너지는? (g = 10 m/s²)",
+    "options": ["10 J", "100 J", "1000 J"],
+    "answer": 1
+  },
+  {
+    "subject": "physics",
+    "question": "처음에 정지해 있던 물체가 등가속도 운동을 하여 4초 동안 20m를 이동했다. 이때 물체의 가속도는?",
+    "options": ["1.25 m/s²", "2.5 m/s²", "5 m/s²"],
+    "answer": 1
+  },
+  {
+    "subject": "physics",
+    "question": "어떤 물체에 10N의 힘을 작용시켜 3m를 이동시켰다. 이때 한 일은?",
+    "options": ["3J", "10J", "30J"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "등가속도 운동하는 물체의 초기속도가 4 m/s이고, 가속도가 2 m/s²일 때, 3초 후 속도는?",
+    "options": ["6 m/s", "10 m/s", "12 m/s"],
+    "answer": 1
+  },
+  {
+    "subject": "physics",
+    "question": "다음 중 가속도가 0인 운동은?",
+    "options": ["자유낙하운동", "등속 원운동", "등속 직선운동"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "지면에서 10m 높이에 있는 질량 2kg의 물체의 위치에너지는? (g = 10 m/s²)",
+    "options": ["20 J", "100 J", "200 J"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "질량 2kg의 공이 높이 10m에서 떨어질 때, 공이 바닥에 도달하는 순간 운동에너지는? (g = 10 m/s²)",
+    "options": ["0 J", "100 J", "200 J"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "질량 2kg의 물체가 5 m/s의 속도로 움직일 때 운동량은?",
+    "options": ["10 kg·m/s", "25 kg·m/s", "100 kg·m/s"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "정지해 있던 물체가 3초 동안 등가속도 운동을 하여 27m를 이동했다. 가속도는 얼마인가?",
+    "options": ["3 m/s²", "6 m/s²", "9 m/s²"],
+    "answer": 1
+  },
+  {
+    "subject": "physics",
+    "question": "어떤 물체가 높이 5m에서 자유낙하하여 지면에 도달했다. 바닥에 도달하기 직전의 속도는? (g = 10 m/s²)",
+    "options": ["10 m/s", "14 m/s", "20 m/s"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "전반사가 일어나는 상황으로 옳은 것은?",
+    "options": ["굴절률이 작은 매질에서 큰 매질로 빛이 진행할 때", "입사각이 임계각보다 작을 때", "물에서 공기로 빛이 진행할 때"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "다음 중 전반사를 이용한 기술은?",
+    "options": ["광섬유 통신", "태양광 발전", "적외선 센서"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "진동수 50 Hz, 파장 2m인 파동의 속력은?",
+    "options": ["25 m/s", "50 m/s", "100 m/s"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "파장이 0.5m이고, 속력이 10 m/s인 파동의 진동수는?",
+    "options": ["2 Hz", "10 Hz", "20 Hz"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "진동수가 10Hz인 파동이 2초 동안 20m를 이동했다. 파장은?",
+    "options": ["1 m", "2 m", "4 m"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "등온 과정의 식은?",
+    "options": ["Q = W", "W = - ΔU", "Q = ΔU"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "단열 과정의 식은?",
+    "options": ["Q = W + ΔU", "Q = ΔU", "W = - ΔU"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "등적 과정의 식은?",
+    "options": ["Q = W", "W = - ΔU", "Q = ΔU"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "등압 과정의 식은?",
+    "options": ["Q = W + ΔU", "Q = ΔU", "W = - ΔU"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "다음 설명 중 상자성체에 대한 올바른 설명은?",
+    "options": ["외부자기장을 제거해도 자성이 지속된다.", "외부 자기장과 반대 방향으로 자화된다.", "자기구역이 없다."],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "유도 전류는 자기장의 변화를 방해하는 방향으로 발생한다. 이 법칙의 이름은?",
+    "options": ["패러데이 법칙", "렌츠의 법칙", "작용 반작용의 법칙"],
+    "answer": 1
+  },
+  {
+    "subject": "physics",
+    "question": "다음 중 파장이 가장 짧은 전자기파는? (적외선, 자외선, X선)",
+    "options": ["적외선", "자외선", "X선"],
+    "answer": 2
+  },
+  {
+    "subject": "physics",
+    "question": "다음 중 전자기파에 해당하지 않는 것은? (음파, 자외선, 마이크로파)",
+    "options": ["음파", "자외선", "마이크로파"],
+    "answer": 0
+  },
+  {
+    "subject": "physics",
+    "question": "양공에 의해 전류가 흐르게 되는 반도체는?",
+    "options": ["p형 반도체", "n형 반도체", "t형 반도체"],
+    "answer": 0
+  }
+]

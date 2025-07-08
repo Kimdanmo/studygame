@@ -1,0 +1,17 @@
+{
+    "global": {
+        "font_path": "fonts/Maplestory Bold.ttf",
+        "font_size": 24,
+        "text_color": "#000000"
+    },
+    "elements": {
+        "button": {
+            "font_path": "fonts/Maplestory Bold.ttf",
+            "font_size": 24,
+            "text_color": "#000000",
+            "normal_bg": "#FFFFFF",
+            "hovered_bg": "#DDDDDD",
+            "pressed_bg": "#CCCCCC"
+        }
+    }
+}
