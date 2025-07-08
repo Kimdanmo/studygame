@@ -3,6 +3,20 @@ import random
 import time
 import json
 import os
+import ctypes
+try:
+    ctypes.windll.user32.SetProcessDPIAware()
+except:
+    pass
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
+
+# Firebase 초기화
+cred = credentials.Certificate("studygame-75d03-firebase-adminsdk-fbsvc-d13aa75658.json")  # 너가 다운로드한 JSON 경로
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://studygame-75d03-default-rtdb.firebaseio.com/'
+})
 
 pygame.init()
 
@@ -13,13 +27,13 @@ bgm_fast = "sounds/bgm_fast.mp3"
 
 # 처음에 일반 배경음악 재생
 pygame.mixer.music.load(bgm_normal)
-pygame.mixer.music.set_volume(0.4)        # 볼륨 (0.0 ~ 1.0)
+pygame.mixer.music.set_volume(0.5)        # 볼륨 (0.0 ~ 1.0)
 
 correct_sound = pygame.mixer.Sound("sounds/correct.mp3")
 wrong_sound = pygame.mixer.Sound("sounds/wrong.mp3")
 
 correct_sound.set_volume(0.5)  # 볼륨 조절 (0.0~1.0)
-wrong_sound.set_volume(0.5)
+wrong_sound.set_volume(1)
 
 WIDTH, HEIGHT = 1920, 1080
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -89,8 +103,7 @@ sutuk_images = {
     "chemistry": pygame.transform.scale(pygame.image.load("images/sutuk_chemistry.jpg").convert_alpha(), (80, 100))
 }
 
-title_image = pygame.image.load("images/title_screen.png")
-title_image = pygame.transform.scale(title_image, (WIDTH, HEIGHT))
+title_image = pygame.image.load("images/title_screen.png").convert_alpha()
 
 WHITE = (255, 255, 255)
 GRAY = (230, 230, 230)
@@ -100,12 +113,12 @@ DARK_GRAY = (180, 180, 180)
 subject_options = list(subject_display.keys())
 selected_subject = subject_options[0]
 dropdown_open = False
-dropdown_x = WIDTH // 2 - 100
-dropdown_y = HEIGHT // 2 - 50
+dropdown_x = WIDTH // 2 - 300
+dropdown_y = HEIGHT // 2 + 300
 dropdown_width = 200
 dropdown_height = 70
 
-start_button_rect = pygame.Rect(WIDTH // 2 - 125, HEIGHT // 2 + 300, 250, 90)
+start_button_rect = pygame.Rect(WIDTH // 2 - 700, HEIGHT // 2 + 250, 250, 90)
 retry_button_rect = pygame.Rect(WIDTH // 2 - 125, HEIGHT // 2 + 150, 250, 90)
 
 clock = pygame.time.Clock()
@@ -115,7 +128,7 @@ game_over = False
 
 player_lane = 1
 lane_y_positions = [HEIGHT // 2 - 100, HEIGHT // 2, HEIGHT // 2 + 100]
-player_x = 300
+player_x = 200
 player_y = lane_y_positions[player_lane]
 move_speed = 800
 
@@ -150,6 +163,22 @@ heart_items = []  # 떨어지는 하트 아이템들
 
 speed_multiplier = 1.0
 
+nickname = ""
+nickname_active = False
+nickname_rect = pygame.Rect(WIDTH // 2 - 300, HEIGHT // 2 + 200, 300, 60)
+nickname_color_inactive = pygame.Color('gray')
+nickname_color_active = pygame.Color('dodgerblue')
+nickname_color = nickname_color_inactive
+nickname_font = pygame.font.Font(font_path, 36)
+
+def save_score_to_firebase(nickname, subject, correct_count):
+    ref = db.reference('rankings')
+    ref.push({
+        'nickname': nickname,
+        'subject': subject,
+        'score': correct_count,
+        'timestamp': time.time()
+    })
 def draw_text_center(text, font, color, x, y):
     surf = font.render(text, True, color)
     rect = surf.get_rect(center=(x, y))
@@ -289,34 +318,52 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_pos = pygame.mouse.get_pos()
-            if not game_started and not game_over:
-                dropdown_rect = pygame.Rect(dropdown_x, dropdown_y, dropdown_width, dropdown_height)
-                if dropdown_rect.collidepoint(mouse_pos):
-                    dropdown_open = not dropdown_open
-                else:
-                    if dropdown_open:
-                        for i, option in enumerate(subject_options):
-                            option_rect = pygame.Rect(dropdown_x, dropdown_y + (i + 1)*dropdown_height, dropdown_width, dropdown_height)
-                            if option_rect.collidepoint(mouse_pos):
-                                selected_subject = option
-                                dropdown_open = False
-                                break
-                if start_button_rect.collidepoint(mouse_pos):
-                    internal_subject = subject_display[selected_subject]
-                    filename_map = {
-                        "physics": "physics_questions.json",
-                        "math1": "math1_questions.json",
-                        "math2": "math2_questions.json",
-                        "chemistry": "chemistry_questions.json"
-                    }
-                    problems = load_questions(filename_map[internal_subject], internal_subject)
-                    if problems:
-                        reset_game()
-            elif game_over and retry_button_rect.collidepoint(mouse_pos):
-                game_over = False
-                game_started = False
+
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # 닉네임 입력칸 클릭 여부
+            if nickname_rect.collidepoint(event.pos):
+                nickname_active = True
+                nickname_color = nickname_color_active
+            else:
+                nickname_active = False
+                nickname_color = nickname_color_inactive
+
+            # 👉 여기로 이동해야 함!
+            if event.button == 1:
+                mouse_pos = pygame.mouse.get_pos()
+                if not game_started and not game_over:
+                    dropdown_rect = pygame.Rect(dropdown_x, dropdown_y, dropdown_width, dropdown_height)
+                    if dropdown_rect.collidepoint(mouse_pos):
+                        dropdown_open = not dropdown_open
+                    else:
+                        if dropdown_open:
+                            for i, option in enumerate(subject_options):
+                                option_rect = pygame.Rect(dropdown_x + (i + 1)*dropdown_width, dropdown_y, dropdown_width, dropdown_height)
+                                if option_rect.collidepoint(mouse_pos):
+                                    selected_subject = option
+                                    dropdown_open = False
+                                    break
+                    if start_button_rect.collidepoint(mouse_pos):
+                        internal_subject = subject_display[selected_subject]
+                        filename_map = {
+                            "physics": "physics_questions.json",
+                            "math1": "math1_questions.json",
+                            "math2": "math2_questions.json",
+                            "chemistry": "chemistry_questions.json"
+                        }
+                        problems = load_questions(filename_map[internal_subject], internal_subject)
+                        if problems:
+                            reset_game()
+
+                elif game_over and retry_button_rect.collidepoint(mouse_pos):
+                    game_over = False
+                    game_started = False
+
+        elif event.type == pygame.KEYDOWN and nickname_active:
+            if event.key == pygame.K_BACKSPACE:
+                nickname = nickname[:-1]
+            elif len(nickname) < 10:
+                nickname += event.unicode
 
         elif event.type == pygame.KEYDOWN and game_started:
             if event.key == pygame.K_UP and player_lane > 0:
@@ -324,18 +371,25 @@ while running:
             elif event.key == pygame.K_DOWN and player_lane < 2:
                 player_lane += 1
 
+
     if not game_started and not game_over:
         screen.blit(title_image, (0, 0))
         dropdown_rect = pygame.Rect(dropdown_x, dropdown_y, dropdown_width, dropdown_height)
         pygame.draw.rect(screen, GRAY, dropdown_rect)
         pygame.draw.rect(screen, BLACK, dropdown_rect, 2)
-        screen.blit(font.render(selected_subject + " ▼", True, BLACK), (dropdown_x + 10, dropdown_y + 15))
+        screen.blit(font.render(selected_subject + " ▶", True, BLACK), (dropdown_x + 10, dropdown_y + 15))
         if dropdown_open:
             for i, option in enumerate(subject_options):
-                option_rect = pygame.Rect(dropdown_x, dropdown_y + (i + 1)*dropdown_height, dropdown_width, dropdown_height)
+                option_rect = pygame.Rect(dropdown_x + (i + 1)*dropdown_width, dropdown_y, dropdown_width, dropdown_height)
                 pygame.draw.rect(screen, WHITE, option_rect)
                 pygame.draw.rect(screen, BLACK, option_rect, 1)
                 screen.blit(font.render(option, True, BLACK), (option_rect.x + 10, option_rect.y + 15))
+        
+        pygame.draw.rect(screen, WHITE, nickname_rect)
+        pygame.draw.rect(screen, nickname_color, nickname_rect, 2)
+        nickname_surface = nickname_font.render(nickname or "닉네임 입력", True, BLACK)
+        screen.blit(nickname_surface, (nickname_rect.x + 10, nickname_rect.y + 15))
+
         pygame.draw.rect(screen, DARK_GRAY, start_button_rect)
         pygame.draw.rect(screen, BLACK, start_button_rect, 2)
         draw_text_center("게임 시작", font, BLACK, start_button_rect.centerx, start_button_rect.centery)
@@ -378,6 +432,8 @@ while running:
                         game_over = True
                         pygame.mixer.music.stop()
                         game_started = False
+                        if nickname:  # 닉네임 입력 안 했으면 저장 안 함
+                            save_score_to_firebase(nickname, selected_subject, correct_count)
                         
         # 하트 아이템 이동 및 충돌 처리
         for item in heart_items[:]:
@@ -435,6 +491,8 @@ while running:
                     game_over = True
                     pygame.mixer.music.stop()
                     game_started = False
+                    if nickname:  # 닉네임 입력 안 했으면 저장 안 함
+                        save_score_to_firebase(nickname, selected_subject, correct_count)
 
         if show_answer:
             answer_start_x -= answer_speed * speed_multiplier * dt
@@ -478,13 +536,15 @@ while running:
                             game_over = True
                             pygame.mixer.music.stop()
                             game_started = False
+                            if nickname:  # 닉네임 입력 안 했으면 저장 안 함
+                                save_score_to_firebase(nickname, selected_subject, correct_count)
                     show_answer = False
                     show_problem = False
                     answer_display_start = current_time
                     break
 
         if answer_result:
-            color =(57, 255, 20) if answer_result == "정답!" else (200, 0, 0)
+            color = (57, 255, 20) if "정답!" in answer_result else (200, 0, 0)
             draw_text_center(answer_result, font, color, WIDTH // 2, HEIGHT // 2)
             if current_time - answer_display_start > 3:
                 answer_result = None
@@ -496,7 +556,7 @@ while running:
         for i in range(max_hp):
             screen.blit(
                 heart_full_img if i < hp else heart_empty_img,
-                (200 + i * (heart_size[0] + 10), 130)
+                (100 + i * (heart_size[0] + 10), 100)
             )
 
     pygame.display.update()
